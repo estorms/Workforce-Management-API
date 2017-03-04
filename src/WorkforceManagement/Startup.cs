@@ -41,6 +41,17 @@ namespace WorkforceManagement
 
             services.AddMvc();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowDevelopmentEnvironment",
+                    builder => builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
+
+
             var connection = @"Server=(localdb)\mssqllocaldb;Database=WorkForceManagement;Trusted_Connection=True;";
             services.AddDbContext<WorkforceDbContext>(options => options.UseSqlServer(connection));
         }
@@ -50,6 +61,8 @@ namespace WorkforceManagement
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseCors("AllowDevelopmentEnvironment");
+
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -57,6 +70,7 @@ namespace WorkforceManagement
 
             app.UseMvc();
             DbInitializer.Initialize(app.ApplicationServices);
+            DbInitializer.Read();
 
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WorkforceManagement.Models;
@@ -9,6 +10,19 @@ namespace WorkforceManagement.Data
 {
     public class DbInitializer
     {
+        public static void Read() {
+            using (var stream = new FileStream(@"C:\Users\Liz\Documents\Visual Studio 2015\Projects\WorkforceManagement\src\WorkforceManagement\EmployeeSeed.txt", FileMode.Open))
+            using (var reader = new StreamReader(stream))
+            {
+                string line;
+                // Read and display lines from the file until the end of 
+                // the file is reached.
+                while ((line = reader.ReadLine()) != null)
+                {
+                    Console.WriteLine(line);
+                }
+            }
+        }
         public static void Initialize(IServiceProvider serviceProvider)
         {
             using (var context = new WorkforceDbContext(serviceProvider.GetRequiredService<DbContextOptions<WorkforceDbContext>>()))

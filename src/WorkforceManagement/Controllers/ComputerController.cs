@@ -53,7 +53,7 @@ namespace WorkforceManagement.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var Computer = context.Computer.Where(e => e.ComputerId == id);
+            var Computer = context.Computer.FirstOrDefault(e => e.ComputerId == id);
 
             if (Computer == null)
             {

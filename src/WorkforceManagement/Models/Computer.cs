@@ -18,5 +18,8 @@ namespace WorkforceManagement.Models
 
         public string SerialNumber { get; set; }
 
+        public int? EmployeeId {get; set;}
+
+        public Employee Employee { get; set; }
     }
 }

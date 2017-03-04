@@ -23,9 +23,13 @@ namespace WorkforceManagement.Migrations
 
                     b.Property<DateTime>("DatePurchased");
 
+                    b.Property<int?>("EmployeeId");
+
                     b.Property<string>("SerialNumber");
 
                     b.HasKey("ComputerId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Computer");
                 });
@@ -47,8 +51,6 @@ namespace WorkforceManagement.Migrations
                     b.Property<int>("EmployeeId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ComputerId");
-
                     b.Property<int>("DepartmentId");
 
                     b.Property<string>("FirstName");
@@ -56,8 +58,6 @@ namespace WorkforceManagement.Migrations
                     b.Property<string>("LastName");
 
                     b.HasKey("EmployeeId");
-
-                    b.HasIndex("ComputerId");
 
                     b.HasIndex("DepartmentId");
 
@@ -94,13 +94,15 @@ namespace WorkforceManagement.Migrations
                     b.ToTable("Training");
                 });
 
+            modelBuilder.Entity("WorkforceManagement.Models.Computer", b =>
+                {
+                    b.HasOne("WorkforceManagement.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+                });
+
             modelBuilder.Entity("WorkforceManagement.Models.Employee", b =>
                 {
-                    b.HasOne("WorkforceManagement.Models.Computer", "Computer")
-                        .WithMany()
-                        .HasForeignKey("ComputerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("WorkforceManagement.Models.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")

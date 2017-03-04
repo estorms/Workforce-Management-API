@@ -35,6 +35,20 @@ namespace WorkforceManagement.Controllers
 
             return Ok(Computers);
         }
+
+        [HttpGet("Available")]
+        public IActionResult Available()
+        {
+
+            var Computers = context.Computer.Where(c => c.EmployeeId == null);
+
+            if (Computers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(Computers);
+        }
         // GET api/values/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)

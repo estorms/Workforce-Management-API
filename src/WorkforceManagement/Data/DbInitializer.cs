@@ -18,36 +18,113 @@ namespace WorkforceManagement.Data
                     return;
                 }
 
-                var emp = new Employee
+                var EmployeeArr = new Employee[]
                 {
+
+
+                    new Employee {
                     FirstName = "Jim",
                     LastName = "Thompson",
-                    ComputerId = 1,
                     DepartmentId = 1
 
-                };
+                },
 
-                var comp = new Computer
-                {
-                    DatePurchased = DateTime.Now
-                };
+                    new Employee {
+                    FirstName = "Jane",
+                    LastName = "Goodall",
+                    DepartmentId = 2
 
-                var dept = new Department
-                {
-                    Name = "Electronics"
-                };
+                },
+                    new Employee {
+                    FirstName = "Jerry",
+                    LastName = "Seinfeld",
+                    DepartmentId = 3
 
-                var training = new Training
-                {
-                   Topic = "Workplace Bullying"
-                };
-
-                context.Employee.Add(emp);
-                context.Computer.Add(comp);
-                context.Department.Add(dept);
-                context.Training.Add(training);
-                context.SaveChanges();
                 }
+            };
+
+
+                var ComputerArr = new Computer[] {
+
+                        new Computer {
+                        DatePurchased = DateTime.Now,
+                        SerialNumber = "#1245.3edwue.8345",
+                        },
+
+                        new Computer {
+                        DatePurchased = DateTime.Today,
+                        SerialNumber = "#weg.hreee78.9945",
+                        },
+
+                        new Computer {
+                        DatePurchased = DateTime.Now,
+                        SerialNumber = "#gweeeU.3edwue.2e45",
+                        }
+                    };
+
+                var DepartmentArr = new Department[] {
+
+                    new Department
+                    {
+                        Name = "Pamphleteering"
+                    },
+
+                     new Department
+                     {
+                         Name = "Jumpsuits"
+                     },
+
+                     new Department
+                     {
+                         Name = "Ambrosia Sales"
+                     }
+
+
+                };
+                var TrainingArr = new Training[] {
+
+                     new Training
+                     {
+                         Topic ="Workplace Bullying"
+                     },
+
+                     new Training
+                     {
+                         Topic = "Professional Attire"
+                     },
+
+                     new Training
+                     {
+                         Topic = "Using a Garden Hose"
+                     },
+
+                     new Training
+                     {
+                         Topic = "Yard Gnomes I Have Known"
+                     }
+                    };
+
+
+                foreach (var c in ComputerArr)
+                {
+                    context.Computer.Add(c);
+                }
+
+                foreach (var t in TrainingArr)
+                {
+                    context.Training.Add(t);
+                }
+                foreach (var d in DepartmentArr)
+                {
+                    context.Department.Add(d);
+                }
+
+                foreach (var e in EmployeeArr)
+                {
+                    context.Employee.Add(e);
+                }
+                context.SaveChanges();
+            }
         }
     }
 }

@@ -10,20 +10,6 @@ namespace WorkforceManagement.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Computer",
-                columns: table => new
-                {
-                    ComputerId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DatePurchased = table.Column<DateTime>(nullable: false),
-                    SerialNumber = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Computer", x => x.ComputerId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Department",
                 columns: table => new
                 {
@@ -55,7 +41,6 @@ namespace WorkforceManagement.Migrations
                 {
                     EmployeeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ComputerId = table.Column<int>(nullable: false),
                     DepartmentId = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true)
@@ -64,17 +49,32 @@ namespace WorkforceManagement.Migrations
                 {
                     table.PrimaryKey("PK_Employee", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_Employee_Computer_ComputerId",
-                        column: x => x.ComputerId,
-                        principalTable: "Computer",
-                        principalColumn: "ComputerId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Employee_Department_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Department",
                         principalColumn: "DepartmentId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Computer",
+                columns: table => new
+                {
+                    ComputerId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DatePurchased = table.Column<DateTime>(nullable: false),
+                    EmployeeId = table.Column<int>(nullable: true),
+                    SerialNumber = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Computer", x => x.ComputerId);
+                    table.ForeignKey(
+                        name: "FK_Computer_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,9 +104,9 @@ namespace WorkforceManagement.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employee_ComputerId",
-                table: "Employee",
-                column: "ComputerId");
+                name: "IX_Computer_EmployeeId",
+                table: "Computer",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_DepartmentId",
@@ -127,6 +127,9 @@ namespace WorkforceManagement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Computer");
+
+            migrationBuilder.DropTable(
                 name: "EmployeeTraining");
 
             migrationBuilder.DropTable(
@@ -134,9 +137,6 @@ namespace WorkforceManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "Training");
-
-            migrationBuilder.DropTable(
-                name: "Computer");
 
             migrationBuilder.DropTable(
                 name: "Department");

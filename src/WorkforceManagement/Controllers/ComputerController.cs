@@ -91,6 +91,58 @@ namespace WorkforceManagement.Controllers
         }
 
 
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]Computer computer)
+        {
+            computer.ComputerId = id;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (computer == null)
+            {
+                return NotFound();
+            }
+
+            context.Computer.Update(computer);
+            context.SaveChanges();
+
+            return Ok(computer);
+
+        }
+
+        [HttpPatch("{id}")]
+
+        public IActionResult Patch(int id, [FromBody]int employeeId)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                //Remember to use FirstorDefault: Where returns IQueryable, not Computer(or other static type)
+                var computer = context.Computer.FirstOrDefault(c => c.ComputerId == id);
+                if (computer == null)
+                {
+                    return NotFound();
+                }
+
+                computer.EmployeeId = employeeId;
+                context.Update(computer);
+                context.SaveChanges();
+                return Ok(computer);
+            }
+
+            catch (System.InvalidOperationException)
+            {
+                return NotFound();
+            }
+        
+    }
+
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

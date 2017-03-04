@@ -77,6 +77,27 @@ namespace WorkforceManagement.Controllers
         }
 
 
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]Employee Employee)
+        {
+            Employee.EmployeeId = id;
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (Employee == null)
+            {
+                return NotFound();
+            }
+
+            context.Employee.Update(Employee);
+            context.SaveChanges();
+
+            return Ok(Employee);
+
+        }
+
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

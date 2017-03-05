@@ -10,7 +10,7 @@ namespace WorkforceManagement.Data
 {
     public class DbInitializer
     {
-        public static void Read(IServiceProvider serviceProvider)
+        public static void Initialize(IServiceProvider serviceProvider)
         {
             using (var stream = new FileStream(@"C:\Users\Liz\Documents\Visual Studio 2015\Projects\WorkforceManagement\src\WorkforceManagement\EmployeeSeed.txt", FileMode.Open))
             {
@@ -18,59 +18,16 @@ namespace WorkforceManagement.Data
 
                 using (var reader = new StreamReader(stream))
                 {
-                    // Read and display lines from the file until the end of 
-                    // the file is reached.
-                   
-                    
-                        var employee = new Employee
-                        {
-                            
-                            FirstName = reader.ReadLine(),
-                            LastName = reader.ReadLine(),
-                            DepartmentId = Convert.ToInt32(reader.ReadLine())
-                        };
-                        context.Employee.Add(employee);
-                    context.SaveChanges();
-                    
-                }
-            }
-        }
-        public static void Initialize(IServiceProvider serviceProvider)
-        {
-            using (var context = new WorkforceDbContext(serviceProvider.GetRequiredService<DbContextOptions<WorkforceDbContext>>()))
-            {
-                if (context.Employee.Any())
-                {
-                    return;
-                }
+                    if (context.Employee.Any())
+                    {
+                        return;
+                    }
 
-                var EmployeeArr = new Employee[]
-                {
-
-
-                    new Employee {
-                    FirstName = "Jim",
-                    LastName = "Thompson",
-                    DepartmentId = 1
-
-                },
-
-                    new Employee {
-                    FirstName = "Jane",
-                    LastName = "Goodall",
-                    DepartmentId = 2
-
-                },
-                    new Employee {
-                    FirstName = "Jerry",
-                    LastName = "Seinfeld",
-                    DepartmentId = 3
-
-                }
-            };
-
-
-                var ComputerArr = new Computer[] {
+                    var empList = new List<Employee>();
+                    var allLines = reader.ReadToEnd();
+                    var delimiter = new string[] { "\r\n" };
+                    var linesArray = allLines.Split(delimiter, StringSplitOptions.None);
+                    var ComputerArr = new Computer[] {
 
                         new Computer {
                         DatePurchased = DateTime.Now,
@@ -88,7 +45,7 @@ namespace WorkforceManagement.Data
                         }
                     };
 
-                var DepartmentArr = new Department[] {
+                    var DepartmentArr = new Department[] {
 
                     new Department
                     {
@@ -107,7 +64,8 @@ namespace WorkforceManagement.Data
 
 
                 };
-                var TrainingArr = new Training[] {
+
+                    var TrainingArr = new Training[] {
 
                      new Training
                      {
@@ -130,28 +88,37 @@ namespace WorkforceManagement.Data
                      }
                     };
 
+                    var i = 0;
+                    while (i < linesArray.Length)
+                    {
+                        empList.Add(new Employee(linesArray[i], linesArray[i + 1], Convert.ToInt32(linesArray[i + 2])));
+                        i = i + 3;
+                    }
+                    foreach (var emp in empList)
+                    {
+                        context.Employee.Add(emp);
 
-                foreach (var c in ComputerArr)
-                {
-                    context.Computer.Add(c);
+                    }
+                    foreach (var c in ComputerArr)
+                    {
+                        context.Computer.Add(c);
+                    }
+
+                    foreach (var t in TrainingArr)
+                    {
+                        context.Training.Add(t);
+                    }
+                    foreach (var d in DepartmentArr)
+                    {
+                        context.Department.Add(d);
+                    }
+                    context.SaveChanges();
                 }
 
-                foreach (var t in TrainingArr)
-                {
-                    context.Training.Add(t);
-                }
-                foreach (var d in DepartmentArr)
-                {
-                    context.Department.Add(d);
-                }
-
-                foreach (var e in EmployeeArr)
-                {
-                    context.Employee.Add(e);
-                }
-                context.SaveChanges();
             }
+
         }
+
     }
 }
 

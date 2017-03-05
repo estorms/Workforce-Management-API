@@ -19,5 +19,15 @@ namespace WorkforceManagement.Models
         public int DepartmentId { get; set; }
 
         public Department Department { get; set; }
+
+    public Employee (string firstName, string lastName, int departmentId)
+    {
+            FirstName = firstName;
+            LastName = lastName;
+            DepartmentId = departmentId;
+
+    }
+
+        public Employee() { }
     }
 }

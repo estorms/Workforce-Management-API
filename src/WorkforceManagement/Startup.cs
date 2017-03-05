@@ -70,7 +70,6 @@ namespace WorkforceManagement
 
             app.UseMvc();
             DbInitializer.Initialize(app.ApplicationServices);
-            DbInitializer.Read(app.ApplicationServices);
 
         }
     }

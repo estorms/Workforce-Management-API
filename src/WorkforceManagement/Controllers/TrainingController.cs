@@ -72,8 +72,7 @@ namespace WorkforceManagement.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtRoute("GetTraining", new { id = Training.TrainingId }, Training);
+            return Ok(Training);
         }
 
 

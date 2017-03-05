@@ -48,6 +48,39 @@ namespace WorkforceManagement.Controllers
             return Ok(Employee);
         }
 
+        [HttpPatch("Patch Computer")]
+
+        public IActionResult PatchComputer([FromRoute]int id, [FromBody]int employeeId)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                //Remember to use FirstorDefault: Where returns IQueryable, not Computer(or other static type)
+                var computer = context.Computer.FirstOrDefault(c => c.ComputerId == id);
+                if (computer == null)
+                {
+                    return NotFound();
+                }
+
+                computer.EmployeeId = employeeId;
+                context.Update(computer);
+                context.SaveChanges();
+                return Ok(computer);
+            }
+
+            catch (System.InvalidOperationException)
+            {
+                return NotFound();
+            }
+
+        }
+
+        [HttpPost]
+
         // POST api/values
         public IActionResult Post([FromBody] Employee Employee)
         {
@@ -73,10 +106,39 @@ namespace WorkforceManagement.Controllers
                 }
             }
 
-            return CreatedAtRoute("GetEmployee", new { id = Employee.EmployeeId }, Employee);
+            return Ok(Employee);
         }
 
+        [HttpPatch("{id}")]
 
+        public IActionResult Patch(int id, [FromBody]int employeeId)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                //Remember to use FirstorDefault: Where returns IQueryable, not Computer(or other static type)
+                var computer = context.Computer.FirstOrDefault(c => c.ComputerId == id);
+                if (computer == null)
+                {
+                    return NotFound();
+                }
+
+                computer.EmployeeId = employeeId;
+                context.Update(computer);
+                context.SaveChanges();
+                return Ok(computer);
+            }
+
+            catch (System.InvalidOperationException)
+            {
+                return NotFound();
+            }
+
+        }
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]Employee Employee)
         {

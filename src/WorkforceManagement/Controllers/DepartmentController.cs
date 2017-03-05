@@ -72,8 +72,7 @@ namespace WorkforceManagement.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtRoute("GetDepartment", new { id = Department.DepartmentId }, Department);
+            return Ok(Department);
         }
 
 

@@ -62,6 +62,7 @@ namespace WorkforceManagement.Controllers
             return Ok(Computer);
         }
 
+        [HttpPost]
         // POST api/values
         public IActionResult Post([FromBody] Computer Computer)
         {
@@ -86,8 +87,7 @@ namespace WorkforceManagement.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtRoute("GetComputer", new { id = Computer.ComputerId }, Computer);
+            return Ok(Computer);
         }
 
 

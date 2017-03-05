@@ -10,16 +10,28 @@ namespace WorkforceManagement.Data
 {
     public class DbInitializer
     {
-        public static void Read() {
+        public static void Read(IServiceProvider serviceProvider)
+        {
             using (var stream = new FileStream(@"C:\Users\Liz\Documents\Visual Studio 2015\Projects\WorkforceManagement\src\WorkforceManagement\EmployeeSeed.txt", FileMode.Open))
-            using (var reader = new StreamReader(stream))
             {
-                string line;
-                // Read and display lines from the file until the end of 
-                // the file is reached.
-                while ((line = reader.ReadLine()) != null)
+                using (var context = new WorkforceDbContext(serviceProvider.GetRequiredService<DbContextOptions<WorkforceDbContext>>()))
+
+                using (var reader = new StreamReader(stream))
                 {
-                    Console.WriteLine(line);
+                    // Read and display lines from the file until the end of 
+                    // the file is reached.
+                   
+                    
+                        var employee = new Employee
+                        {
+                            
+                            FirstName = reader.ReadLine(),
+                            LastName = reader.ReadLine(),
+                            DepartmentId = Convert.ToInt32(reader.ReadLine())
+                        };
+                        context.Employee.Add(employee);
+                    context.SaveChanges();
+                    
                 }
             }
         }
